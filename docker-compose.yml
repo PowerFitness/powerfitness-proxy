@@ -31,7 +31,8 @@ services:
             - certbot-etc:/etc/letsencrypt
             - certbot-var:/var/lib/letsencrypt
         depends_on:
-            - nodejs
+            - powerfitness-ma
+            - powerfitness-ms
         networks:
             - app-network
     certbot:
@@ -42,7 +43,7 @@ services:
             - certbot-var:/var/lib/letsencrypt
             - web-root:/var/www/html
         depends_on:
-            - webserver
+            - nginx
         command: certonly --webroot --webroot-path=/var/www/html --email catelynjscholl@gmail.com --agree-tos --no-eff-email --staging -d powerfitness.app  -d www.powerfitness.app
 
 volumes:

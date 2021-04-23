@@ -1,3 +1,5 @@
+version: '3'
+
 services:
     powerfitness-ma: 
         build:
@@ -5,6 +7,8 @@ services:
             dockerfile: ../powerfitness-ma/Dockerfile # path to dockerfile
         image: powerfitness-ma
         container_name: powerfitness-ma
+        volumes:
+            - web-root:/usr/src/app/dist
     powerfitness-ms: 
         build:
             context: .

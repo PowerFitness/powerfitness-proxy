@@ -2,9 +2,15 @@ services:
     powerfitness-ma: 
         build:
             context: .
-            dockerfile: Dockerfile # path to dockerfile
+            dockerfile: ../powerfitness-ma/Dockerfile # path to dockerfile
         image: powerfitness-ma
         container_name: powerfitness-ma
+    powerfitness-ms: 
+        build:
+            context: .
+            dockerfile: ../powerfitness-ms/Dockerfile # path to dockerfile
+        image: powerfitness-ms
+        container_name: powerfitness-ms
         restart: unless-stopped
         networks:
             - app-network

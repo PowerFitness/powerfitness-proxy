@@ -51,9 +51,9 @@ volumes:
     web-root:
         driver: local
         driver_opts:
-        type: none
-        device: /home/cjscholl/dev/powerfitness-ma/dist/ #todo
-        o: bind
+            type: none
+            device: /home/cjscholl/dev/powerfitness-ma/dist/ #todo
+            o: bind
     
 networks:
     app-network:

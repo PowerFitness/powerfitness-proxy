@@ -2,18 +2,14 @@ version: '3'
 
 services:
     powerfitness-ma: 
-        build:
-            context: ../powerfitness-ma/
-            dockerfile: ../powerfitness-ma/Dockerfile # path to dockerfile
         image: powerfitness-ma
+        build: ../powerfitness-ma/
         container_name: powerfitness-ma
         volumes:
             - web-root:/usr/src/app/dist
     powerfitness-ms: 
-        build:
-            context: ../powerfitness-ms/
-            dockerfile: ../powerfitness-ms/Dockerfile # path to dockerfile
         image: powerfitness-ms
+        build: ../powerfitness-ms/
         container_name: powerfitness-ms
         restart: unless-stopped
         networks:

@@ -3,7 +3,7 @@ version: '3'
 services:
     powerfitness-ma: 
         build:
-            context: .
+            context: ../powerfitness-ma/
             dockerfile: ../powerfitness-ma/Dockerfile # path to dockerfile
         image: powerfitness-ma
         container_name: powerfitness-ma
@@ -11,7 +11,7 @@ services:
             - web-root:/usr/src/app/dist
     powerfitness-ms: 
         build:
-            context: .
+            context: ../powerfitness-ms/
             dockerfile: ../powerfitness-ms/Dockerfile # path to dockerfile
         image: powerfitness-ms
         container_name: powerfitness-ms

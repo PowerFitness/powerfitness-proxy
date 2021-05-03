@@ -10,7 +10,7 @@ services:
 
   powerfitness-ms: 
     env_file:
-      - mysql-variables.env
+      - ../mysql-variables.env
     image: powerfitness-ms
     build: ../powerfitness-ms/
     container_name: powerfitness-ms
@@ -49,7 +49,7 @@ services:
 
   mysql:
     env_file:
-      - mysql-variables.env
+      - ../mysql-variables.env
     image: mysql:5.7
     container_name: mysql
     restart: unless-stopped

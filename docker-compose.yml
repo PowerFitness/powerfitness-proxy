@@ -1,63 +1,88 @@
 version: '3'
 
 services:
-    powerfitness-ma: 
-        image: powerfitness-ma
-        build: ../powerfitness-ma/
-        container_name: powerfitness-ma
-        volumes:
-            - web-root:/usr/src/app/dist
-    powerfitness-ms: 
-        image: powerfitness-ms
-        build: ../powerfitness-ms/
-        container_name: powerfitness-ms
-        restart: unless-stopped
-        networks:
-            - app-network
-    nginx:
-        image: nginx:mainline-alpine
-        container_name: nginx
-        restart: unless-stopped
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - web-root:/var/www/html
-            - ./nginx-conf:/etc/nginx/conf.d
-            - certbot-etc:/etc/letsencrypt
-            - certbot-var:/var/lib/letsencrypt
-            - dhparam:/etc/ssl/certs
-        depends_on:
-            - powerfitness-ms
-        networks:
-            - app-network
-    certbot:
-        image: certbot/certbot
-        container_name: certbot
-        volumes:
-            - certbot-etc:/etc/letsencrypt
-            - certbot-var:/var/lib/letsencrypt
-            - web-root:/var/www/html
-        depends_on:
-            - nginx
-        command: certonly --webroot --webroot-path=/var/www/html --email catelynjscholl@gmail.com --agree-tos --no-eff-email --force-renewal -d powerfitness.app  -d www.powerfitness.app
+  powerfitness-ma: 
+    image: powerfitness-ma
+    build: ../powerfitness-ma/
+    container_name: powerfitness-ma
+    volumes:
+      - web-root:/usr/src/app/dist
+
+  powerfitness-ms: 
+    env_file:
+      - mysql-variables.env
+    image: powerfitness-ms
+    build: ../powerfitness-ms/
+    container_name: powerfitness-ms
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:mainline-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    depends_on:
+      - powerfitness-ms
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email catelynjscholl@gmail.com --agree-tos --no-eff-email --keep-until-expiring -d powerfitness.app  -d www.powerfitness.app
+
+  mysql:
+    env_file:
+      - mysql-variables.env
+    image: mysql:5.7
+    container_name: mysql
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+      - ../powerfitness-ms/sql-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
 
 volumes:
-    certbot-etc:
-    certbot-var:
-    web-root:
-        driver: local
-        driver_opts:
-            type: none
-            device: /home/cjscholl/dev/powerfitness-ma/dist/ #todo
-            o: bind
-    dhparam:
-        driver: local
-        driver_opts:
-            type: none
-            device: /home/cjscholl/dev/dhparam/
-            o: bind
-    
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cjscholl/dev/powerfitness-ma/dist/ #todo
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cjscholl/dev/dhparam/
+      o: bind
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cjscholl/dev/data/
+      o: bind
+  
 networks:
-    app-network:
-        driver: bridge
+  app-network:
+    driver: bridge

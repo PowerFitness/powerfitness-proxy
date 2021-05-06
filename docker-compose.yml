@@ -11,6 +11,7 @@ services:
   powerfitness-ms: 
     env_file:
       - ../mysql-variables.env
+      - ../node-app-instance.env
     image: powerfitness-ms
     build: ../powerfitness-ms/
     container_name: powerfitness-ms

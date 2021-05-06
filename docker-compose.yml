@@ -16,6 +16,8 @@ services:
     build: ../powerfitness-ms/
     container_name: powerfitness-ms
     restart: unless-stopped
+    volumes:
+      - firebase-cert:/usr/src/firebase-cert
     networks:
       - app-network
 
@@ -70,6 +72,12 @@ volumes:
     driver_opts:
       type: none
       device: /home/cjscholl/dev/powerfitness-ma/dist/ #todo
+      o: bind
+  firebase-cert:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cjscholl/dev/firebase-cert/
       o: bind
   dhparam:
     driver: local
